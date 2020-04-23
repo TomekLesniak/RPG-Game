@@ -8,15 +8,26 @@ public class Mover : MonoBehaviour
     [SerializeField]
     private Transform _target;
 
-    // Start is called before the first frame update
-    void Start()
+
+    void Update()
     {
+        if (Input.GetMouseButtonDown(0))
+        {
+            MoveToCursor();
+        }
         
     }
 
-    // Update is called once per frame
-    void Update()
+
+    private void MoveToCursor()
     {
-        GetComponent<NavMeshAgent>().destination = _target.position;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        bool hasHit = Physics.Raycast(ray, out hit);
+
+        if (hasHit)
+        {
+            GetComponent<NavMeshAgent>().destination = hit.point;
+        }
     }
 }
