@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using RPG.Combat;
+using RPG.Core;
 using RPG.Movement;
 using UnityEngine;
 
@@ -13,6 +14,7 @@ namespace RPG.Control
         //private Transform _target;
         void Update()
         {
+            if (GetComponent<Health>().IsDead()) return; // Can`t do anything if player is dead
             if (InteractWithCombat()) return;
             if (InteractWithMovement()) return;
         }
@@ -24,14 +26,16 @@ namespace RPG.Control
             foreach (var hit in hits)
             {
                 CombatTarget target = hit.transform.GetComponent<CombatTarget>();
-                if (!GetComponent<Fighter>().CanAttack(target))
+                if (target == null) continue;
+
+                if (!GetComponent<Fighter>().CanAttack(target.gameObject))
                 {
                     continue;
                 }
 
-                if (Input.GetMouseButtonDown(0))
+                if (Input.GetMouseButton(0))
                 {
-                    GetComponent<Fighter>().Attack(target);
+                    GetComponent<Fighter>().Attack(target.gameObject);
                 }
                 return true;
             }
@@ -48,7 +52,7 @@ namespace RPG.Control
             {
                 if (Input.GetMouseButton(0))
                 {
-                    GetComponent<Mover>().StartMoveAction(hit.point);
+                    GetComponent<Mover>().StartMoveAction(hit.point, 1f);
                    // GetComponent<Animator>().SetTrigger("stopAttack");
                 }
 
