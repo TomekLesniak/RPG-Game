@@ -16,13 +16,9 @@ namespace RPG.Saving
             z = vector.z;
         }
 
-        public Vector3 DeserializeToVector3(SerializableVector3 serializableVector3)
+        public Vector3 DeserializeToVector3()
         {
-            Vector3 vector = new Vector3();
-            vector.x = serializableVector3.x;
-            vector.y = serializableVector3.y;
-            vector.z = serializableVector3.z;
-            return vector;
+            return new Vector3(x, y, z);
         }
     }
 
