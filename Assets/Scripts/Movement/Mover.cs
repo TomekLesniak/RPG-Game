@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using RPG.Core;
+using RPG.Resources;
 using RPG.Saving;
 using UnityEngine;
 using UnityEngine.AI;
@@ -14,7 +15,7 @@ namespace RPG.Movement
 
         private NavMeshAgent _navMeshAgent;
 
-        private void Start()
+        private void Awake()
         {
             _navMeshAgent = GetComponent<NavMeshAgent>();
         }
