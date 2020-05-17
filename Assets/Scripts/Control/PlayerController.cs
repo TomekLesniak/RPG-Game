@@ -6,6 +6,7 @@ using RPG.Core;
 using RPG.Movement;
 using RPG.Resources;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.EventSystems;
 
 namespace RPG.Control
@@ -25,6 +26,8 @@ namespace RPG.Control
         }
 
         [SerializeField] private CursorMapping[] cursorMappings = null;
+        [SerializeField] private float MaxNavMeshProjectionDistance = 1.0f;
+        [SerializeField] private float maxNavPathLength = 40f;
 
         void Update()
         {
@@ -48,6 +51,8 @@ namespace RPG.Control
 
         private bool InteractWithUI()
         {
+            if (EventSystem.current == null) return false;
+
             return EventSystem.current.IsPointerOverGameObject(); // USER INTERFACE GAME OBJECT!
         }
 
@@ -87,14 +92,15 @@ namespace RPG.Control
 
         private bool InteractWithMovement()
         {
-            RaycastHit hit;
-            bool hasHit = Physics.Raycast(GetMouseRay(), out hit);
+            
+            Vector3 target;
+            bool hasHit = RaycastNavMesh(out target);
 
             if (hasHit)
             {
                 if (Input.GetMouseButton(0))
                 {
-                    GetComponent<Mover>().StartMoveAction(hit.point, 1f);
+                    GetComponent<Mover>().StartMoveAction(target, 1f);
                    // GetComponent<Animator>().SetTrigger("stopAttack");
                 }
 
@@ -103,6 +109,37 @@ namespace RPG.Control
             }
 
             return false;
+        }
+
+        private bool RaycastNavMesh(out Vector3 target)
+        {
+            RaycastHit hit;
+            bool hasHit = Physics.Raycast(GetMouseRay(), out hit);
+            NavMeshHit navMeshHit;
+            target = new Vector3();
+
+            if (!hasHit)
+            {
+                return false;
+            }
+
+            if (NavMesh.SamplePosition(hit.point, out navMeshHit, MaxNavMeshProjectionDistance, NavMesh.AllAreas))
+            {
+                target = navMeshHit.position;
+
+                NavMeshPath path = new NavMeshPath();
+                bool hasPath = NavMesh.CalculatePath(this.transform.position, target, NavMesh.AllAreas, path);
+
+                if (!hasPath) return false;
+                if (path.status != NavMeshPathStatus.PathComplete) return false;
+                if (GetPathLength(path) > maxNavPathLength) return false;
+
+
+                return true;
+            }
+
+            return false;
+
         }
 
         public void SetCursor(CursorType type)
@@ -120,6 +157,21 @@ namespace RPG.Control
             }
 
             return cursorMappings[0];
+        }
+
+        private float GetPathLength(NavMeshPath path)
+        {
+            Vector3[] pathVectors = path.corners;
+            float distance = 0;
+            if (pathVectors.Length < 2) return distance;
+
+            for (int i = 0; i < pathVectors.Length - 1; i++)
+            {
+                distance += Vector3.Distance(pathVectors[i], pathVectors[i + 1]);
+            }
+
+            print(distance);
+            return distance;
         }
 
         private static Ray GetMouseRay()

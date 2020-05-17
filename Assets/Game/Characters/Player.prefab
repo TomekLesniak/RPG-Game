@@ -41,6 +41,7 @@ MonoBehaviour:
   - type: 0
     texture: {fileID: 2800000, guid: 21628736160fcc9488493401da3ef621, type: 3}
     hotspot: {x: 0, y: 0}
+  MaxNavMeshProjectionDistance: 1
 --- !u!1001 &5574909563164484274
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -52,6 +53,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 1819746564959594332, guid: 2df5fe8c6b3b90845bcd2daa00a50254,
+        type: 3}
+      propertyPath: uniqueIdentifier
+      value: player
       objectReference: {fileID: 0}
     - target: {fileID: 2887781650784729713, guid: 2df5fe8c6b3b90845bcd2daa00a50254,
         type: 3}
@@ -236,7 +242,8 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 00c57cceeb669b44cb25eaf6a7541c80, type: 2}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9505156, guid: 679ff741e12a7e740819ede24a7000b7, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 679ff741e12a7e740819ede24a7000b7, type: 3}
 --- !u!4 &8553043638621772287 stripped
 Transform:

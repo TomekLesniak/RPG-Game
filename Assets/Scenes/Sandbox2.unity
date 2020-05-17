@@ -370,6 +370,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Core
       objectReference: {fileID: 0}
+    - target: {fileID: 5484037630101156401, guid: c35f180e1261db2438621e2923e542a1,
+        type: 3}
+      propertyPath: experiencePoints
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 8243093029267745101, guid: c35f180e1261db2438621e2923e542a1,
         type: 3}
       propertyPath: m_LocalRotation.x

@@ -127,6 +127,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 1819746564959594332, guid: 2df5fe8c6b3b90845bcd2daa00a50254,
+        type: 3}
+      propertyPath: uniqueIdentifier
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 2887781650784729713, guid: 2df5fe8c6b3b90845bcd2daa00a50254,
         type: 3}
       propertyPath: _weaponDamage
@@ -167,6 +172,11 @@ PrefabInstance:
     - target: {fileID: 5435635244508209042, guid: 2df5fe8c6b3b90845bcd2daa00a50254,
         type: 3}
       propertyPath: m_IsKinematic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5532149543490503163, guid: 2df5fe8c6b3b90845bcd2daa00a50254,
+        type: 3}
+      propertyPath: characterClass
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8709827850444516263, guid: 2df5fe8c6b3b90845bcd2daa00a50254,
