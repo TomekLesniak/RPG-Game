@@ -5,11 +5,19 @@ using RPG.Core;
 using RPG.Saving;
 using RPG.Stats;
 using UnityEngine;
+using UnityEngine.Events;
 
-namespace RPG.Resources
+namespace RPG.Attributes
 {
     public class Health : MonoBehaviour, ISaveable
     {
+        [SerializeField] private TakeDamageEvent takeDamage;
+
+        [System.Serializable]
+        public class TakeDamageEvent : UnityEvent<float>
+        {
+        }
+
         LazyValue<float> health;
         private bool isDead = false;
 
@@ -51,6 +59,7 @@ namespace RPG.Resources
         public void TakeDamage(GameObject instigator, float amountOfDamage)
         {
             print(gameObject.name + " took damage: " + amountOfDamage);
+            takeDamage?.Invoke(amountOfDamage); // DamageText UI
 
             if (health.value - amountOfDamage <= 0)
             {
@@ -75,7 +84,12 @@ namespace RPG.Resources
 
         public float GetHealthPercentage()
         {
-            return 100 * (health.value / GetComponent<BaseStats>().GetStat(Stat.Health));
+            return 100 * GetFraction();
+        }
+
+        public float GetFraction()
+        {
+            return health.value / GetComponent<BaseStats>().GetStat(Stat.Health);
         }
 
         private void GiveExperience(GameObject instigator)
