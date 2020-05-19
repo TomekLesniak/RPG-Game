@@ -12,6 +12,7 @@ namespace RPG.Attributes
     public class Health : MonoBehaviour, ISaveable
     {
         [SerializeField] private TakeDamageEvent takeDamage;
+        [SerializeField] private UnityEvent onDie;
 
         [System.Serializable]
         public class TakeDamageEvent : UnityEvent<float>
@@ -65,6 +66,7 @@ namespace RPG.Attributes
             {
                 health.value = 0;
                 Die();
+                onDie?.Invoke();
                 GiveExperience(instigator);
             }
             else

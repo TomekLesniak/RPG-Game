@@ -10,7 +10,7 @@ namespace RPG.Core
         //Script allow UI elements over characters always facing towards camera
         //</summary>
 
-        private void Update()
+        private void LateUpdate()
         {
             transform.forward = Camera.main.transform.forward;
         }

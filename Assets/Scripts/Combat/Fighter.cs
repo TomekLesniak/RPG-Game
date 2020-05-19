@@ -16,27 +16,29 @@ namespace RPG.Combat
         [SerializeField] private float _timeBetweenAttacks = 1.0f;
         [SerializeField] private Transform rightHandTransform = null;
         [SerializeField] private Transform leftHandTransform = null;
-        [SerializeField] private Weapon defaultWeapon = null;
+        [SerializeField] private WeaponConfig _defaultWeapon = null;
 
         private float _timeSinceLastAttack = 0;
         private Health _target;
+        WeaponConfig currentWeaponConfig;
         private LazyValue<Weapon> currentWeapon;
 
         private void Awake()
         {
+            currentWeaponConfig = _defaultWeapon;
             currentWeapon = new LazyValue<Weapon>(SetupDefaultWeapon);
         }
 
         private Weapon SetupDefaultWeapon()
         {
-            AttachWeapon(defaultWeapon);
-            return defaultWeapon;
+            return AttachWeapon(_defaultWeapon);
         }
 
         private void Start()
         {
             currentWeapon.ForceInit();
-            // Else saving system will equip a weapon
+            //AttachWeapon(currentWeaponConfig);
+            // Else saving system will equip a weaponConfig
         }
 
         
@@ -58,16 +60,16 @@ namespace RPG.Combat
 
         }
 
-        public void EquipWeapon(Weapon weapon)
+        public void EquipWeapon(WeaponConfig weaponConfig)
         {
-            currentWeapon.value = weapon;
-            AttachWeapon(weapon);
+            currentWeaponConfig = weaponConfig;
+            currentWeapon.value = AttachWeapon(weaponConfig);
         }
 
-        private void AttachWeapon(Weapon weapon)
+        private Weapon AttachWeapon(WeaponConfig weaponConfig)
         {
             Animator animator = GetComponent<Animator>();
-            weapon.Spawn(rightHandTransform, leftHandTransform, animator);
+            return weaponConfig.Spawn(rightHandTransform, leftHandTransform, animator);
         }
 
         public Health GetTarget()
@@ -106,9 +108,16 @@ namespace RPG.Combat
             if (_target == null) { return; }
 
             float damage = GetComponent<BaseStats>().GetStat(Stat.Damage);
-            if (currentWeapon.value.HasProjectile())
+
+            if (currentWeapon.value != null)
             {
-                currentWeapon.value.LaunchProjectile(rightHandTransform, leftHandTransform, _target, this.gameObject, damage);
+                currentWeapon.value.OnHit();
+            }
+
+
+            if (currentWeaponConfig.HasProjectile())
+            {
+                currentWeaponConfig.LaunchProjectile(rightHandTransform, leftHandTransform, _target, this.gameObject, damage);
             }
             else
             { 
@@ -124,7 +133,7 @@ namespace RPG.Combat
 
         private bool GetIsInRange()
         {
-            return Vector3.Distance(transform.position, _target.transform.position) <= currentWeapon.value.GetWeaponRange();
+            return Vector3.Distance(transform.position, _target.transform.position) <= currentWeaponConfig.GetWeaponRange();
         }
 
         public void Attack(GameObject target)
@@ -150,7 +159,7 @@ namespace RPG.Combat
         {
             if (stat == Stat.Damage)
             {
-                yield return currentWeapon.value.GetWeaponDamage();
+                yield return currentWeaponConfig.GetWeaponDamage();
             }
         }
 
@@ -158,19 +167,19 @@ namespace RPG.Combat
         {
             if (stat == Stat.Damage)
             {
-                yield return currentWeapon.value.GetPercentageBonus();
+                yield return currentWeaponConfig.GetPercentageBonus();
             }
         }
 
         public object CaptureState()
         {
-            return currentWeapon.value.name;
+            return currentWeaponConfig.name;
         }
 
         public void RestoreState(object state)
         {
-            Weapon weapon = UnityEngine.Resources.Load<Weapon>((string) state);
-            EquipWeapon(weapon);
+            WeaponConfig weaponConfig = UnityEngine.Resources.Load<WeaponConfig>((string) state);
+            EquipWeapon(weaponConfig);
         }
 
         

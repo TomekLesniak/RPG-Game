@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using RPG.Control;
+using RPG.Core;
 using RPG.Saving;
 using UnityEngine;
 using UnityEngine.AI;
@@ -43,11 +45,15 @@ namespace RPG.SceneManagement
 
             DontDestroyOnLoad(this.gameObject);
 
+            DisableControl(GameObject.FindWithTag("Player"));
+
             yield return fader.FadeOut(fadeOutTime);
 
             savingWrapper.Save();
 
             yield return SceneManager.LoadSceneAsync(sceneToLoad);
+            
+            DisableControl(GameObject.FindWithTag("Player"));
 
             savingWrapper.Load();
 
@@ -58,9 +64,8 @@ namespace RPG.SceneManagement
 
 
             yield return new WaitForSeconds(waitTime);
-
+            EnableControl(GameObject.FindWithTag("Player"));
             yield return fader.FadeIn(fadeInTime);
-
 
             Destroy(this.gameObject);
         }
@@ -87,6 +92,19 @@ namespace RPG.SceneManagement
             }
 
             return null;
+        }
+
+        private void DisableControl(GameObject target)
+        {
+            if (target == null) return;
+            target.GetComponent<ActionScheduler>().CancelCurrentAction();
+            target.GetComponent<PlayerController>().enabled = false;
+        }
+
+        private void EnableControl(GameObject target)
+        {
+            if (target == null) return;
+            target.GetComponent<PlayerController>().enabled = true;
         }
     }
 }

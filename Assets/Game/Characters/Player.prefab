@@ -76,6 +76,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: a56b021d89d75fc46b64892e42687b27,
         type: 2}
+    - target: {fileID: 2887781650784729713, guid: 2df5fe8c6b3b90845bcd2daa00a50254,
+        type: 3}
+      propertyPath: _defaultWeapon
+      value: 
+      objectReference: {fileID: 11400000, guid: 2bcb2f5aaa5af54419efcf083bb92990,
+        type: 2}
     - target: {fileID: 5435635244508209042, guid: 2df5fe8c6b3b90845bcd2daa00a50254,
         type: 3}
       propertyPath: m_UseGravity
@@ -94,7 +100,7 @@ PrefabInstance:
     - target: {fileID: 8443606377094790961, guid: 2df5fe8c6b3b90845bcd2daa00a50254,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8443606377094790961, guid: 2df5fe8c6b3b90845bcd2daa00a50254,
         type: 3}

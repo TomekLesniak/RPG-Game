@@ -170,7 +170,6 @@ namespace RPG.Control
                 distance += Vector3.Distance(pathVectors[i], pathVectors[i + 1]);
             }
 
-            print(distance);
             return distance;
         }
 
